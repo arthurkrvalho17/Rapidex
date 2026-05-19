@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rapidex</title>
+
+<style>
+:root {
+    --primary: #2f4fb6;
+    --secondary: #19b8c2;
+    --dark: #0f172a;
+    --gray: #64748b;
+    --light: #f8fafc;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background: var(--light);
+    color: var(--dark);
+}
+
+/* CONTAINER */
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* HERO */
+.hero {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.hero img {
+    max-width: 140px;
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    font-size: 18px;
+    color: var(--gray);
+    max-width: 600px;
+    margin: auto;
+}
+
+.cta {
+    margin-top: 30px;
+}
+
+.btn {
+    background: linear-gradient(90deg, var(--secondary), var(--primary));
+    color: white;
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+/* SECTION */
+.section {
+    margin-top: 60px;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.section-title h2 {
+    font-size: 26px;
+}
+
+.section-title p {
+    color: var(--gray);
+}
+
+/* CARDS */
+.grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.card h3 {
+    margin-bottom: 10px;
+}
+
+/* FEATURES */
+.feature {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+.icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--secondary), var(--primary));
+}
+
+/* TIMELINE */
+.timeline {
+    border-left: 3px solid var(--secondary);
+    padding-left: 20px;
+}
+
+/* FOOTER CTA */
+.final {
+    text-align: center;
+    margin-top: 60px;
+    padding: 40px;
+    background: white;
+    border-radius: 20px;
+}
+
+/* RESPONSIVO */
+@media(min-width: 768px) {
+    .grid {
+        flex-direction: row;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HERO -->
+    <section class="hero">
+        <img src="https://imgur.com/6lxerN1">
+        <h1>Serviços locais, resolvidos em minutos</h1>
+        <p>
+        A Rapidex conecta você aos melhores freelancers próximos, com rapidez, transparência e segurança.
+        </p>
+
+        <div class="cta">
+            <a href="https://wa.me/SEUNUMEROAQUI" class="btn">🚀 Aprovar Projeto</a>
+        </div>
+    </section>
+
+    <!-- PROBLEMA -->
+    <section class="section">
+        <div class="section-title">
+            <h2>O problema</h2>
+            <p>Um mercado grande, mas ainda ineficiente</p>
+        </div>
+
+        <div class="card">
+            <p>
+            Encontrar profissionais confiáveis ainda depende de indicação, demora e incerteza.
+            Enquanto isso, milhões de freelancers ficam sem acesso constante a demanda.
+            </p>
+        </div>
+    </section>
+
+    <!-- SOLUÇÃO -->
+    <section class="section">
+        <div class="section-title">
+            <h2>A solução</h2>
+            <p>Simples, rápida e escalável</p>
+        </div>
+
+        <div class="card">
+            <p>
+            A Rapidex transforma esse processo em uma experiência digital sob demanda,
+            conectando clientes e prestadores em poucos minutos.
+            </p>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section">
+        <div class="section-title">
+            <h2>O que você recebe</h2>
+        </div>
+
+        <div class="grid">
+
+            <div class="card">
+                <div class="feature">
+                    <div class="icon"></div>
+                    <div>
+                        <h3>Busca inteligente</h3>
+                        <p>Encontre prestadores próximos com base em localização e reputação</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="feature">
+                    <div class="icon"></div>
+                    <div>
+                        <h3>Chat em tempo real</h3>
+                        <p>Converse diretamente com o prestador antes de contratar</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- DIFERENCIAIS -->
+    <section class="section">
+        <div class="section-title">
+            <h2>Diferenciais</h2>
+        </div>
+
+        <div class="grid">
+
+            <div class="card">⚡ Foco no prestador</div>
+            <div class="card">📍 Geolocalização precisa</div>
+            <div class="card">💰 Transparência de preço</div>
+            <div class="card">💬 Comunicação instantânea</div>
+
+        </div>
+    </section>
+
+    <!-- ESCOPO -->
+    <section class="section">
+        <div class="section-title">
+            <h2>Escopo inicial</h2>
+        </div>
+
+        <div class="grid">
+
+            <div class="card">
+                <h3>Módulos principais</h3>
+                <ul>
+                    <li>Buscar prestadores</li>
+                    <li>Chat entre usuário e prestador</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>Futuro</h3>
+                <p>Expansão baseada em roadmap estratégico</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CRONOGRAMA -->
+    <section class="section">
+        <div class="section-title">
+            <h2>Cronograma</h2>
+        </div>
+
+        <div class="timeline">
+
+            <div class="card">Etapa 1 — Planejamento</div>
+            <div class="card">Etapa 2 — Desenvolvimento</div>
+            <div class="card">Etapa 3 — Testes</div>
+            <div class="card">Etapa 4 — Entrega</div>
+
+        </div>
+    </section>
+
+    <!-- INVESTIMENTO -->
+    <section class="section">
+        <div class="section-title">
+            <h2>Investimento</h2>
+        </div>
+
+        <div class="card">
+            Valor sob definição conforme escopo final
+        </div>
+
+        <div class="card">
+            Condições flexíveis de pagamento
+        </div>
+    </section>
+
+    <!-- FINAL -->
+    <section class="final">
+        <h2>Vamos tirar isso do papel?</h2>
+        <p>Projeto pronto para escalar um mercado bilionário.</p>
+
+        <a href="https://wa.me/SEUNUMEROAQUI" class="btn">
+            ✅ Aprovar Proposta
+        </a>
+    </section>
+
+</div>
+
+</body>
+</html>
