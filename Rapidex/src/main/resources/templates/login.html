@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rapidex — Login</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f0f2f5;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      border: 1px solid #e4e6ea;
+      padding: 56px 64px 48px;
+      width: 100%;
+      max-width: 540px;
+    }
+
+    .logo-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 36px;
+    }
+
+    .logo-wrap svg {
+      width: 96px;
+      height: 64px;
+      margin-bottom: 12px;
+    }
+
+    .brand-name {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1a1f4b;
+      letter-spacing: -0.5px;
+    }
+
+    h2 {
+      font-size: 15px;
+      font-weight: 500;
+      color: #1a1f4b;
+      margin-bottom: 20px;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: #1a1f4b;
+      margin-bottom: 6px;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      height: 46px;
+      padding: 0 14px;
+      border: 1px solid #d0d5e0;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #1a1f4b;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input::placeholder { color: #b0b8cc; }
+
+    input:focus { border-color: #3b87dd; }
+
+    .forgot {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: 13px;
+      color: #3b87dd;
+      text-decoration: none;
+    }
+
+    .forgot:hover { text-decoration: underline; }
+
+    .btn-login {
+      display: block;
+      width: 100%;
+      height: 48px;
+      margin-top: 24px;
+      background: #3b87dd;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn-login:hover { background: #2d74c8; }
+    .btn-login:active { transform: scale(0.99); }
+
+    .signup {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #5a6072;
+
+    }
+
+    .signup a {
+      color: #3b87dd;
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .signup a:hover { text-decoration: underline; }
+
+    .alert-error {
+      background: #fff0f0;
+      border: 1px solid #f5c6c6;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #c0392b;
+      margin-bottom: 18px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <div class="logo-wrap">
+    <!-- Rapidex logo SVG (infinity + lightning bolt) -->
+    <svg viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="gLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#2ecfc7"/>
+          <stop offset="100%" stop-color="#2a90d9"/>
+        </linearGradient>
+        <linearGradient id="gRight" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#2a90d9"/>
+          <stop offset="100%" stop-color="#1a3fa8"/>
+        </linearGradient>
+      </defs>
+      <!-- Left lobe -->
+      <ellipse cx="38" cy="40" rx="26" ry="26" fill="url(#gLeft)" opacity="0.95"/>
+      <!-- Right lobe -->
+      <ellipse cx="82" cy="40" rx="26" ry="26" fill="url(#gRight)" opacity="0.95"/>
+      <!-- Inner cutout left -->
+      <ellipse cx="38" cy="40" rx="14" ry="14" fill="white"/>
+      <!-- Inner cutout right -->
+      <ellipse cx="82" cy="40" rx="14" ry="14" fill="white"/>
+      <!-- Lightning bolt -->
+      <polygon points="65,16 52,43 61,43 55,64 74,37 63,37" fill="white"/>
+    </svg>
+    <span class="brand-name">Rapidex</span>
+  </div>
+
+  <h2>Entrar na sua conta</h2>
+
+  <div class="alert-error" th:if="${param.error}">
+    E-mail ou senha incorretos.
+  </div>
+
+  <form th:action="@{/login}" method="post">
+
+    <div class="field">
+      <label for="email">E-mail</label>
+      <input type="email" id="email" name="username" placeholder="Digite seu email" />
+    </div>
+
+    <div class="field">
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" name="password" placeholder="Digite sua senha" />
+      <a href="#" class="forgot">Esqueceu a senha?</a>
+    </div>
+
+    <button type="submit" class="btn-login">Login</button>
+
+  </form>
+
+  <p class="signup">Não tem conta? <a th:href="@{/cadastro}">Cadastrar</a></p>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Rapidex — Criar conta</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:#f7f8fc;
+  color:#1a1f4b;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ── TOPBAR ── */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 40px;background:#fff;border-bottom:1px solid #e4e6ea;
+}
+.nav-logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+.nav-logo span{font-size:19px;font-weight:700;color:#1a1f4b}
+.topbar-link{font-size:13px;color:#5a6072}
+.topbar-link a{color:#3b87dd;font-weight:600;text-decoration:none}
+.topbar-link a:hover{text-decoration:underline}
+
+/* ── MAIN ── */
+.page-wrap{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:40px 20px;
+}
+
+.register-card{
+  background:#fff;border:1px solid #e4e6ea;border-radius:20px;
+  width:100%;max-width:560px;
+  box-shadow:0 4px 24px rgba(0,0,0,.07);
+  overflow:hidden;
+}
+
+/* ── STEPS HEADER ── */
+.steps-header{
+  display:flex;background:#f7f8fc;border-bottom:1px solid #e4e6ea;
+  padding:0;
+}
+.step-tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  padding:16px 8px;position:relative;cursor:default;
+  transition:background .2s;
+}
+.step-tab::after{
+  content:'';position:absolute;top:50%;right:0;
+  width:1px;height:60%;background:#e4e6ea;
+  transform:translateY(-50%);
+}
+.step-tab:last-child::after{display:none}
+.step-num{
+  width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;margin-bottom:5px;
+  background:#e4e6ea;color:#8a92a6;
+  transition:all .3s;
+}
+.step-tab.active .step-num{background:#3b87dd;color:#fff}
+.step-tab.done .step-num{background:#1d9e75;color:#fff}
+.step-label{font-size:11px;font-weight:600;color:#8a92a6;text-align:center;line-height:1.3}
+.step-tab.active .step-label{color:#3b87dd}
+.step-tab.done .step-label{color:#1d9e75}
+
+/* progress bar */
+.progress-bar{height:3px;background:#e4e6ea;position:relative;overflow:hidden}
+.progress-fill{
+  height:100%;background:linear-gradient(90deg,#3b87dd,#1d9e75);
+  transition:width .4s ease;
+}
+
+/* ── CARD BODY ── */
+.card-body{padding:32px 36px}
+
+.step-content{display:none}
+.step-content.active{display:block}
+
+/* step title */
+.step-title{font-size:20px;font-weight:800;color:#1a1f4b;margin-bottom:4px}
+.step-sub{font-size:13px;color:#8a92a6;margin-bottom:28px}
+
+/* ── ACCOUNT TYPE ── */
+.account-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px}
+.account-type-card{
+  border:2px solid #e4e6ea;border-radius:14px;padding:20px 16px;
+  cursor:pointer;text-align:center;transition:all .2s;
+  background:#fff;position:relative;
+}
+.account-type-card:hover{border-color:#b5d4f4;background:#f8fbff}
+.account-type-card.selected{border-color:#3b87dd;background:#eef5ff}
+.account-type-card .check{
+  position:absolute;top:10px;right:10px;
+  width:20px;height:20px;border-radius:50%;
+  background:#3b87dd;color:#fff;font-size:11px;
+  display:none;align-items:center;justify-content:center;
+}
+.account-type-card.selected .check{display:flex}
+.type-icon{font-size:36px;margin-bottom:10px;display:block}
+.type-name{font-size:15px;font-weight:700;color:#1a1f4b;margin-bottom:4px}
+.type-desc{font-size:12px;color:#8a92a6;line-height:1.4}
+
+/* ── FORM ── */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.form-row.single{grid-template-columns:1fr}
+
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{
+  font-size:12px;font-weight:600;color:#5a6072;
+  text-transform:uppercase;letter-spacing:.4px;
+}
+.field-wrap{position:relative}
+.field input,.field select{
+  width:100%;height:46px;padding:0 14px;
+  border:1.5px solid #d0d5e0;border-radius:10px;
+  font-size:14px;color:#1a1f4b;background:#fff;
+  outline:none;transition:border-color .2s,box-shadow .2s;
+  font-family:inherit;
+}
+.field input:focus,.field select:focus{
+  border-color:#3b87dd;
+  box-shadow:0 0 0 3px rgba(59,135,221,.1);
+}
+.field input.error{border-color:#e24b4a;box-shadow:0 0 0 3px rgba(226,75,74,.1)}
+.field input.success{border-color:#1d9e75;box-shadow:0 0 0 3px rgba(29,158,117,.1)}
+
+/* password toggle */
+.pw-toggle{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;color:#8a92a6;
+  font-size:16px;padding:4px;line-height:1;
+}
+.pw-toggle:hover{color:#3b87dd}
+
+/* password strength */
+.pw-strength{margin-top:8px}
+.pw-strength-bar{
+  display:flex;gap:4px;margin-bottom:4px;
+}
+.pw-bar-seg{
+  flex:1;height:3px;border-radius:2px;background:#e4e6ea;
+  transition:background .3s;
+}
+.pw-bar-seg.weak{background:#e24b4a}
+.pw-bar-seg.fair{background:#f5a623}
+.pw-bar-seg.good{background:#3b87dd}
+.pw-bar-seg.strong{background:#1d9e75}
+.pw-strength-label{font-size:11px;color:#8a92a6}
+
+/* field error/hint */
+.field-msg{
+  font-size:11px;margin-top:4px;display:none;
+  align-items:center;gap:4px;
+}
+.field-msg.error{color:#e24b4a;display:flex}
+.field-msg.success{color:#1d9e75;display:flex}
+.field-msg.hint{color:#8a92a6;display:flex}
+
+/* phone flag */
+.phone-wrap{display:flex;gap:8px}
+.phone-prefix{
+  height:46px;padding:0 10px;
+  border:1.5px solid #d0d5e0;border-radius:10px;
+  font-size:14px;color:#1a1f4b;background:#fff;
+  outline:none;cursor:pointer;min-width:90px;
+  font-family:inherit;transition:border-color .2s;
+}
+.phone-prefix:focus{border-color:#3b87dd}
+
+/* checkbox */
+.checkbox-wrap{
+  display:flex;align-items:flex-start;gap:10px;
+  margin-bottom:14px;
+}
+.checkbox-wrap input[type=checkbox]{
+  width:18px;height:18px;cursor:pointer;
+  accent-color:#3b87dd;flex-shrink:0;margin-top:1px;
+}
+.checkbox-label{font-size:13px;color:#5a6072;line-height:1.5}
+.checkbox-label a{color:#3b87dd;text-decoration:none;font-weight:600}
+.checkbox-label a:hover{text-decoration:underline}
+.checkbox-wrap.error-check .checkbox-label{color:#e24b4a}
+
+/* verification code */
+.code-inputs{display:flex;gap:10px;justify-content:center;margin:24px 0}
+.code-digit{
+  width:52px;height:60px;border:2px solid #d0d5e0;
+  border-radius:12px;text-align:center;font-size:22px;
+  font-weight:700;color:#1a1f4b;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+  background:#fff;
+}
+.code-digit:focus{border-color:#3b87dd;box-shadow:0 0 0 3px rgba(59,135,221,.12)}
+.code-digit.filled{border-color:#1d9e75;background:#f3fdf7}
+.code-resend{text-align:center;font-size:13px;color:#8a92a6;margin-bottom:8px}
+.code-resend button{background:none;border:none;color:#3b87dd;font-weight:600;cursor:pointer;font-size:13px}
+.code-resend button:hover{text-decoration:underline}
+
+/* success screen */
+.success-wrap{text-align:center;padding:16px 0}
+.success-icon{
+  width:80px;height:80px;border-radius:50%;
+  background:linear-gradient(135deg,#1d9e75,#3b87dd);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 20px;font-size:36px;
+  box-shadow:0 8px 24px rgba(29,158,117,.25);
+}
+.success-title{font-size:22px;font-weight:800;color:#1a1f4b;margin-bottom:8px}
+.success-sub{font-size:14px;color:#5a6072;line-height:1.6;margin-bottom:24px;max-width:360px;margin-left:auto;margin-right:auto}
+.success-detail{
+  background:#f7f8fc;border-radius:12px;padding:16px 20px;
+  text-align:left;margin-bottom:24px;
+}
+.success-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid #e4e6ea}
+.success-row:last-child{border-bottom:none}
+.success-row-label{color:#8a92a6;font-weight:500}
+.success-row-val{color:#1a1f4b;font-weight:600}
+
+/* ── BUTTONS ── */
+.btn-primary{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;height:50px;border:none;border-radius:12px;
+  background:#3b87dd;color:#fff;font-size:15px;font-weight:700;
+  cursor:pointer;transition:background .2s,transform .1s;
+  margin-top:8px;
+}
+.btn-primary:hover{background:#2d74c8}
+.btn-primary:active{transform:scale(.99)}
+.btn-primary:disabled{background:#b5d4f4;cursor:not-allowed}
+
+.btn-secondary{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;height:50px;border:1.5px solid #d0d5e0;border-radius:12px;
+  background:#fff;color:#5a6072;font-size:15px;font-weight:600;
+  cursor:pointer;transition:all .2s;margin-top:8px;
+}
+.btn-secondary:hover{border-color:#3b87dd;color:#3b87dd}
+
+.btn-success{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;height:50px;border:none;border-radius:12px;
+  background:linear-gradient(135deg,#1d9e75,#1a8a65);color:#fff;
+  font-size:15px;font-weight:700;cursor:pointer;
+  transition:opacity .2s;margin-top:8px;
+}
+.btn-success:hover{opacity:.9}
+
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+
+/* ── ALERT BANNER ── */
+.alert{
+  display:none;align-items:flex-start;gap:10px;
+  padding:12px 16px;border-radius:10px;margin-bottom:20px;
+  font-size:13px;line-height:1.5;
+}
+.alert.error{display:flex;background:#fcebeb;border:1px solid #f7c1c1;color:#a32d2d}
+.alert.success{display:flex;background:#eaf3de;border:1px solid #c0dd97;color:#3b6d11}
+.alert-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+
+/* category pills (freelancer) */
+.category-pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.cat-pill{
+  padding:7px 14px;border:1.5px solid #d0d5e0;border-radius:20px;
+  font-size:13px;font-weight:500;color:#5a6072;cursor:pointer;
+  transition:all .2s;background:#fff;
+}
+.cat-pill:hover{border-color:#3b87dd;color:#3b87dd;background:#f0f6ff}
+.cat-pill.selected{border-color:#3b87dd;color:#fff;background:#3b87dd}
+
+/* divider */
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:#e4e6ea}
+.divider span{font-size:12px;color:#8a92a6;white-space:nowrap}
+
+/* tooltip */
+.tooltip{position:relative;display:inline-flex}
+.tooltip-icon{
+  width:16px;height:16px;border-radius:50%;
+  background:#d0d5e0;color:#5a6072;font-size:10px;
+  display:inline-flex;align-items:center;justify-content:center;
+  cursor:help;margin-left:4px;font-weight:700;
+}
+.tooltip-text{
+  display:none;position:absolute;bottom:calc(100% + 6px);left:50%;
+  transform:translateX(-50%);background:#1a1f4b;color:#fff;
+  font-size:11px;padding:6px 10px;border-radius:6px;
+  white-space:nowrap;z-index:10;pointer-events:none;
+}
+.tooltip:hover .tooltip-text{display:block}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <a class="nav-logo" href="rapidex-home.html">
+    <svg width="32" height="24" viewBox="0 0 120 80" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="gL" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#2ecfc7"/><stop offset="100%" stop-color="#2a90d9"/></linearGradient>
+        <linearGradient id="gR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#2a90d9"/><stop offset="100%" stop-color="#1a3fa8"/></linearGradient>
+      </defs>
+      <ellipse cx="38" cy="40" rx="26" ry="26" fill="url(#gL)"/>
+      <ellipse cx="82" cy="40" rx="26" ry="26" fill="url(#gR)"/>
+      <ellipse cx="38" cy="40" rx="14" ry="14" fill="white"/>
+      <ellipse cx="82" cy="40" rx="14" ry="14" fill="white"/>
+      <polygon points="65,16 52,43 61,43 55,64 74,37 63,37" fill="white"/>
+    </svg>
+    <span>Rapidex</span>
+  </a>
+  <div class="topbar-link">Já tem conta? <a href="rapidex-login.html">Fazer login</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="page-wrap">
+  <div class="register-card">
+
+    <!-- STEP TABS -->
+    <div class="steps-header">
+      <div class="step-tab active" id="tab1">
+        <div class="step-num">1</div>
+        <div class="step-label">Tipo de conta</div>
+      </div>
+      <div class="step-tab" id="tab2">
+        <div class="step-num">2</div>
+        <div class="step-label">Seus dados</div>
+      </div>
+      <div class="step-tab" id="tab3">
+        <div class="step-num">3</div>
+        <div class="step-label">Segurança</div>
+      </div>
+      <div class="step-tab" id="tab4">
+        <div class="step-num" style="font-size:10px;">✉</div>
+        <div class="step-label">Verificação</div>
+      </div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:25%"></div></div>
+
+    <!-- CARD BODY -->
+    <div class="card-body">
+
+      <!-- ══ STEP 1: TIPO DE CONTA ══ -->
+      <div class="step-content active" id="step1">
+        <div class="step-title">Bem-vindo à Rapidex! 👋</div>
+        <div class="step-sub">Como você vai usar a plataforma?</div>
+
+        <div class="account-type-grid">
+          <div class="account-type-card" id="typeCliente" onclick="selectType('cliente')">
+            <span class="check">✔</span>
+            <span class="type-icon">🛒</span>
+            <div class="type-name">Sou Cliente</div>
+            <div class="type-desc">Quero contratar profissionais para serviços</div>
+          </div>
+          <div class="account-type-card" id="typeFreelancer" onclick="selectType('freelancer')">
+            <span class="check">✔</span>
+            <span class="type-icon">🔧</span>
+            <div class="type-name">Sou Profissional</div>
+            <div class="type-desc">Quero oferecer meus serviços e receber pedidos</div>
+          </div>
+        </div>
+
+        <div class="alert error" id="alert1"><span class="alert-icon">⚠</span> Selecione um tipo de conta para continuar.</div>
+
+        <button class="btn-primary" onclick="goToStep(2)">Continuar →</button>
+        <div class="divider"><span>ou</span></div>
+        <div style="text-align:center;font-size:13px;color:#8a92a6;">Ao criar uma conta, você concorda com nossos <a href="#" style="color:#3b87dd;font-weight:600;">Termos de Uso</a></div>
+      </div>
+
+      <!-- ══ STEP 2: DADOS PESSOAIS ══ -->
+      <div class="step-content" id="step2">
+        <div class="step-title" id="step2Title">Seus dados</div>
+        <div class="step-sub" id="step2Sub">Preencha suas informações básicas</div>
+
+        <div class="alert error" id="alert2"><span class="alert-icon">⚠</span><span id="alert2Msg">Preencha todos os campos obrigatórios.</span></div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Nome completo *</label>
+            <div class="field-wrap">
+              <input type="text" id="fNome" placeholder="Ex: João Silva" oninput="validateNome()"/>
+            </div>
+            <div class="field-msg error" id="errNome">⚠ Informe seu nome completo.</div>
+          </div>
+          <div class="field">
+            <label>Como quer ser chamado?</label>
+            <div class="field-wrap">
+              <input type="text" id="fApelido" placeholder="Ex: João"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row single">
+          <div class="field">
+            <label>E-mail *</label>
+            <div class="field-wrap">
+              <input type="email" id="fEmail" placeholder="seu@email.com" oninput="validateEmail()"/>
+            </div>
+            <div class="field-msg error" id="errEmail">⚠ Informe um e-mail válido.</div>
+            <div class="field-msg success" id="okEmail">✔ E-mail válido.</div>
+          </div>
+        </div>
+
+        <div class="form-row single">
+          <div class="field">
+            <label>Telefone / WhatsApp *</label>
+            <input type="tel" id="fTel" placeholder="(61) 99999-0000" oninput="validateTel()" style="width:100%"/>
+            <div class="field-msg error" id="errTel">⚠ Informe um telefone válido.</div>
+            <div class="field-msg hint" id="hintTel">📱 Usaremos para enviar o código de verificação.</div>
+          </div>
+        </div>
+
+        <!-- Extra fields for freelancer -->
+        <div id="freelancerFields" style="display:none;">
+          <div class="form-row single">
+            <div class="field">
+              <label>Área de atuação principal *
+                <span class="tooltip"><span class="tooltip-icon">?</span><span class="tooltip-text">Pode adicionar mais categorias depois</span></span>
+              </label>
+              <div class="category-pills" id="catPills">
+                <div class="cat-pill" onclick="toggleCat(this,'elétrica')">⚡ Elétrica</div>
+                <div class="cat-pill" onclick="toggleCat(this,'limpeza')">🧹 Limpeza</div>
+                <div class="cat-pill" onclick="toggleCat(this,'aulas')">🎓 Aulas</div>
+                <div class="cat-pill" onclick="toggleCat(this,'design')">🎨 Design</div>
+                <div class="cat-pill" onclick="toggleCat(this,'hidraulica')">🔧 Hidráulica</div>
+                <div class="cat-pill" onclick="toggleCat(this,'pet')">🐾 Pet</div>
+                <div class="cat-pill" onclick="toggleCat(this,'ti')">💻 TI</div>
+                <div class="cat-pill" onclick="toggleCat(this,'beleza')">💇 Beleza</div>
+              </div>
+              <div class="field-msg error" id="errCat">⚠ Selecione ao menos uma área.</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label>Cidade de atuação *</label>
+              <input type="text" id="fCidade" placeholder="Ex: Brasília"/>
+            </div>
+            <div class="field">
+              <label>UF *</label>
+              <select id="fUF">
+                <option value="">— UF —</option>
+                <option>AC</option><option>AL</option><option>AP</option><option>AM</option>
+                <option>BA</option><option>CE</option><option selected>DF</option><option>ES</option>
+                <option>GO</option><option>MA</option><option>MT</option><option>MS</option>
+                <option>MG</option><option>PA</option><option>PB</option><option>PR</option>
+                <option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
+                <option>RS</option><option>RO</option><option>RR</option><option>SC</option>
+                <option>SP</option><option>SE</option><option>TO</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="goToStep(1)">← Voltar</button>
+          <button class="btn-primary" style="margin-top:0" onclick="goToStep(3)">Continuar →</button>
+        </div>
+      </div>
+
+      <!-- ══ STEP 3: SEGURANÇA ══ -->
+      <div class="step-content" id="step3">
+        <div class="step-title">Crie sua senha</div>
+        <div class="step-sub">Use uma senha forte para proteger sua conta</div>
+
+        <div class="alert error" id="alert3"><span class="alert-icon">⚠</span><span id="alert3Msg">Corrija os campos abaixo.</span></div>
+
+        <div class="form-row single" style="margin-bottom:8px;">
+          <div class="field">
+            <label>Senha *</label>
+            <div class="field-wrap">
+              <input type="password" id="fSenha" placeholder="Mínimo 8 caracteres" oninput="checkStrength();validateSenha()"/>
+              <button type="button" class="pw-toggle" onclick="togglePw('fSenha',this)">👁</button>
+            </div>
+            <div class="pw-strength" id="pwStrengthWrap" style="display:none;">
+              <div class="pw-strength-bar">
+                <div class="pw-bar-seg" id="seg1"></div>
+                <div class="pw-bar-seg" id="seg2"></div>
+                <div class="pw-bar-seg" id="seg3"></div>
+                <div class="pw-bar-seg" id="seg4"></div>
+              </div>
+              <div class="pw-strength-label" id="pwLabel">—</div>
+            </div>
+            <div class="field-msg error" id="errSenha">⚠ A senha deve ter pelo menos 8 caracteres.</div>
+          </div>
+        </div>
+
+        <div class="form-row single" style="margin-bottom:20px;">
+          <div class="field">
+            <label>Confirmar senha *</label>
+            <div class="field-wrap">
+              <input type="password" id="fConfirm" placeholder="Repita a senha" oninput="validateConfirm()"/>
+              <button type="button" class="pw-toggle" onclick="togglePw('fConfirm',this)">👁</button>
+            </div>
+            <div class="field-msg error" id="errConfirm">⚠ As senhas não coincidem.</div>
+            <div class="field-msg success" id="okConfirm">✔ Senhas coincidem.</div>
+          </div>
+        </div>
+
+        <!-- password requirements checklist -->
+        <div style="background:#f7f8fc;border-radius:10px;padding:12px 16px;margin-bottom:20px;">
+          <div style="font-size:12px;font-weight:600;color:#8a92a6;margin-bottom:8px;">REQUISITOS DA SENHA</div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <div class="req-item" id="req-len"><span style="font-size:11px;margin-right:6px;">○</span><span style="font-size:12px;color:#8a92a6;">Mínimo 8 caracteres</span></div>
+            <div class="req-item" id="req-up"><span style="font-size:11px;margin-right:6px;">○</span><span style="font-size:12px;color:#8a92a6;">Uma letra maiúscula</span></div>
+            <div class="req-item" id="req-num"><span style="font-size:11px;margin-right:6px;">○</span><span style="font-size:12px;color:#8a92a6;">Um número</span></div>
+            <div class="req-item" id="req-sym"><span style="font-size:11px;margin-right:6px;">○</span><span style="font-size:12px;color:#8a92a6;">Um símbolo (@, !, #...)</span></div>
+          </div>
+        </div>
+
+        <div class="checkbox-wrap" id="chkTermosWrap">
+          <input type="checkbox" id="chkTermos" onchange="validateTermos()"/>
+          <label for="chkTermos" class="checkbox-label">Li e aceito os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a> da Rapidex</label>
+        </div>
+        <div class="checkbox-wrap">
+          <input type="checkbox" id="chkMarketing"/>
+          <label for="chkMarketing" class="checkbox-label">Quero receber novidades, promoções e dicas por e-mail (opcional)</label>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="goToStep(2)">← Voltar</button>
+          <button class="btn-primary" style="margin-top:0" onclick="goToStep(4)">Criar conta →</button>
+        </div>
+      </div>
+
+      <!-- ══ STEP 4: VERIFICAÇÃO ══ -->
+      <div class="step-content" id="step4">
+        <div class="step-title">Verifique seu e-mail 📧</div>
+        <div class="step-sub">Enviamos um código de 5 dígitos para <strong id="emailDisplay">—</strong>. Verifique também o spam.</div>
+
+        <div class="alert error" id="alert4"><span class="alert-icon">⚠</span> Código incorreto. Tente novamente.</div>
+        <div class="alert success" id="alert4ok"><span class="alert-icon">✔</span> Código reenviado com sucesso!</div>
+
+        <div class="code-inputs">
+          <input class="code-digit" maxlength="1" id="d1" oninput="codeInput(this,'d2')" onkeydown="codeBack(event,this,null)"/>
+          <input class="code-digit" maxlength="1" id="d2" oninput="codeInput(this,'d3')" onkeydown="codeBack(event,this,'d1')"/>
+          <input class="code-digit" maxlength="1" id="d3" oninput="codeInput(this,'d4')" onkeydown="codeBack(event,this,'d2')"/>
+          <input class="code-digit" maxlength="1" id="d4" oninput="codeInput(this,'d5')" onkeydown="codeBack(event,this,'d3')"/>
+          <input class="code-digit" maxlength="1" id="d5" oninput="codeInput(this,null)" onkeydown="codeBack(event,this,'d4')"/>
+        </div>
+
+        <div class="code-resend" id="resendWrap">
+          <span>Não recebeu? </span>
+          <button onclick="resendCode()" id="resendBtn">Reenviar código</button>
+          <span id="countdownWrap" style="display:none;color:#8a92a6;"> (aguarde <span id="countdown">60</span>s)</span>
+        </div>
+
+        <button class="btn-primary" onclick="verifyCode()">Verificar e continuar →</button>
+        <button class="btn-secondary" onclick="goToStep(3)">← Voltar</button>
+      </div>
+
+      <!-- ══ STEP 5: SUCESSO ══ -->
+      <div class="step-content" id="step5">
+        <div class="success-wrap">
+          <div class="success-icon">🎉</div>
+          <div class="success-title">Conta criada com sucesso!</div>
+          <div class="success-sub" id="successSub">Bem-vindo à Rapidex! Sua conta foi verificada e está pronta para uso.</div>
+
+          <div class="success-detail">
+            <div class="success-row"><span class="success-row-label">Nome</span><span class="success-row-val" id="sumNome">—</span></div>
+            <div class="success-row"><span class="success-row-label">E-mail</span><span class="success-row-val" id="sumEmail">—</span></div>
+            <div class="success-row"><span class="success-row-label">Tipo de conta</span><span class="success-row-val" id="sumTipo">—</span></div>
+            <div class="success-row"><span class="success-row-label">Telefone</span><span class="success-row-val" id="sumTel">—</span></div>
+          </div>
+
+          <button class="btn-success" onclick="goToDashboard()" id="btnGoApp">
+            <span id="btnGoAppLabel">Acessar minha conta →</span>
+          </button>
+          <div style="margin-top:12px;font-size:12px;color:#8a92a6;">Você será redirecionado automaticamente em <span id="autoRedirect">5</span>s</div>
+        </div>
+      </div>
+
+    </div><!-- /card-body -->
+  </div><!-- /register-card -->
+</div><!-- /page-wrap -->
+
+<script>
+// ── STATE ──
+let currentStep = 1;
+let selectedType = null;
+let selectedCats = [];
+let codeTimer = null;
+const CORRECT_CODE = '12345'; // demo
+
+// ── STEP NAVIGATION ──
+function goToStep(n) {
+  if (n > currentStep && !validateStep(currentStep)) return;
+
+  document.getElementById('step' + currentStep).classList.remove('active');
+  document.getElementById('tab' + currentStep)?.classList.remove('active');
+
+  currentStep = n;
+
+  // Show step or success
+  const el = document.getElementById('step' + n);
+  if (el) el.classList.add('active');
+
+  // Update tabs
+  for (let i = 1; i <= 4; i++) {
+    const tab = document.getElementById('tab' + i);
+    if (!tab) continue;
+    tab.classList.remove('active', 'done');
+    if (i < n) tab.classList.add('done');
+    else if (i === n) tab.classList.add('active');
+  }
+
+  // Progress
+  const pct = n === 5 ? 100 : Math.round((n / 4) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  // Setup steps
+  if (n === 2) setupStep2();
+  if (n === 4) setupStep4();
+  if (n === 5) setupSuccess();
+}
+
+// ── VALIDATE EACH STEP ──
+function validateStep(n) {
+  hideAlert('alert1'); hideAlert('alert2'); hideAlert('alert3'); hideAlert('alert4');
+
+  if (n === 1) {
+    if (!selectedType) { showAlert('alert1'); return false; }
+    return true;
+  }
+
+  if (n === 2) {
+    let ok = true;
+    const nome = document.getElementById('fNome').value.trim();
+    const email = document.getElementById('fEmail').value.trim();
+    const tel = document.getElementById('fTel').value.trim();
+
+    if (!nome || nome.split(' ').length < 2) {
+      document.getElementById('fNome').classList.add('error');
+      document.getElementById('errNome').classList.add('error');
+      ok = false;
+    }
+    if (!isValidEmail(email)) {
+      document.getElementById('fEmail').classList.add('error');
+      document.getElementById('errEmail').classList.add('error');
+      ok = false;
+    }
+    if (tel.replace(/\D/g,'').length < 10) {
+      document.getElementById('fTel').classList.add('error');
+      document.getElementById('errTel').classList.add('error');
+      ok = false;
+    }
+    if (selectedType === 'freelancer' && selectedCats.length === 0) {
+      document.getElementById('errCat').classList.add('error');
+      ok = false;
+    }
+    if (!ok) {
+      document.getElementById('alert2Msg').textContent = 'Preencha todos os campos obrigatórios.';
+      showAlert('alert2');
+    }
+    return ok;
+  }
+
+  if (n === 3) {
+    const senha = document.getElementById('fSenha').value;
+    const confirm = document.getElementById('fConfirm').value;
+    const termos = document.getElementById('chkTermos').checked;
+    let ok = true;
+
+    if (senha.length < 8) {
+      document.getElementById('fSenha').classList.add('error');
+      document.getElementById('errSenha').classList.add('error');
+      ok = false;
+    }
+    if (senha !== confirm || !confirm) {
+      document.getElementById('fConfirm').classList.add('error');
+      document.getElementById('errConfirm').classList.add('error');
+      ok = false;
+    }
+    if (!termos) {
+      document.getElementById('chkTermosWrap').classList.add('error-check');
+      document.getElementById('alert3Msg').textContent = 'Aceite os Termos de Uso para continuar.';
+      ok = false;
+    }
+    if (!ok) showAlert('alert3');
+    return ok;
+  }
+
+  return true;
+}
+
+// ── STEP 1: ACCOUNT TYPE ──
+function selectType(type) {
+  selectedType = type;
+  document.getElementById('typeCliente').classList.toggle('selected', type === 'cliente');
+  document.getElementById('typeFreelancer').classList.toggle('selected', type === 'freelancer');
+  hideAlert('alert1');
+}
+
+// ── STEP 2: SETUP ──
+function setupStep2() {
+  if (selectedType === 'freelancer') {
+    document.getElementById('step2Title').textContent = 'Seus dados profissionais';
+    document.getElementById('step2Sub').textContent = 'Informe seus dados para começar a receber pedidos';
+    document.getElementById('freelancerFields').style.display = 'block';
+  } else {
+    document.getElementById('step2Title').textContent = 'Seus dados';
+    document.getElementById('step2Sub').textContent = 'Preencha suas informações básicas';
+    document.getElementById('freelancerFields').style.display = 'none';
+  }
+}
+
+function toggleCat(el, cat) {
+  el.classList.toggle('selected');
+  if (el.classList.contains('selected')) selectedCats.push(cat);
+  else selectedCats = selectedCats.filter(c => c !== cat);
+  document.getElementById('errCat').classList.remove('error');
+}
+
+// ── VALIDATIONS ──
+function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+
+function validateNome() {
+  const el = document.getElementById('fNome');
+  const v = el.value.trim();
+  const ok = v.split(' ').length >= 2 && v.length > 3;
+  const bad = v.length > 0 && !ok;
+  el.classList.toggle('error', bad);
+  el.classList.toggle('success', ok);
+  document.getElementById('errNome').classList.toggle('error', bad);
+}
+
+function validateEmail() {
+  const el = document.getElementById('fEmail');
+  const v = el.value.trim();
+  const ok = v.length > 0 && isValidEmail(v);
+  const bad = v.length > 0 && !isValidEmail(v);
+  el.classList.toggle('error', bad);
+  el.classList.toggle('success', ok);
+  document.getElementById('errEmail').classList.toggle('error', bad);
+  document.getElementById('okEmail').classList.toggle('success', ok);
+}
+
+// maskPhone removed
+
+function validateTel() {
+  const el = document.getElementById('fTel');
+  const digits = el.value.replace(/\D/g, '');
+  const ok = digits.length >= 10;
+  const bad = el.value.length > 0 && !ok;
+  el.classList.toggle('error', bad);
+  el.classList.toggle('success', ok);
+  document.getElementById('errTel').classList.toggle('error', bad);
+  document.getElementById('hintTel').style.display = (ok || el.value.length === 0) ? 'none' : 'flex';
+}
+
+// ── PASSWORD ──
+function togglePw(id, btn) {
+  const input = document.getElementById(id);
+  if (input.type === 'password') { input.type = 'text'; btn.textContent = '🙈'; }
+  else { input.type = 'password'; btn.textContent = '👁'; }
+}
+
+function checkStrength() {
+  const pw = document.getElementById('fSenha').value;
+  document.getElementById('pwStrengthWrap').style.display = pw.length > 0 ? 'block' : 'none';
+
+  const has = {
+    len: pw.length >= 8,
+    up: /[A-Z]/.test(pw),
+    num: /[0-9]/.test(pw),
+    sym: /[^A-Za-z0-9]/.test(pw)
+  };
+
+  // Update requirements
+  updateReq('req-len', has.len);
+  updateReq('req-up', has.up);
+  updateReq('req-num', has.num);
+  updateReq('req-sym', has.sym);
+
+  const score = Object.values(has).filter(Boolean).length;
+  const labels = ['', 'Fraca', 'Regular', 'Boa', 'Forte'];
+  const classes = ['', 'weak', 'fair', 'good', 'strong'];
+  document.getElementById('pwLabel').textContent = labels[score] || '—';
+
+  for (let i = 1; i <= 4; i++) {
+    const seg = document.getElementById('seg' + i);
+    seg.className = 'pw-bar-seg ' + (i <= score ? classes[score] : '');
+  }
+}
+
+function updateReq(id, ok) {
+  const el = document.getElementById(id);
+  el.querySelector('span:first-child').textContent = ok ? '✔' : '○';
+  el.querySelector('span:first-child').style.color = ok ? '#1d9e75' : '#8a92a6';
+  el.querySelector('span:last-child').style.color = ok ? '#1d9e75' : '#8a92a6';
+  el.querySelector('span:last-child').style.fontWeight = ok ? '600' : '400';
+}
+
+function validateSenha() {
+  const el = document.getElementById('fSenha');
+  const ok = el.value.length >= 8;
+  el.classList.toggle('error', !ok && el.value.length > 0);
+  el.classList.toggle('success', ok);
+  document.getElementById('errSenha').classList.toggle('error', !ok && el.value.length > 0);
+}
+
+function validateConfirm() {
+  const pw = document.getElementById('fSenha').value;
+  const cf = document.getElementById('fConfirm').value;
+  const ok = cf && pw === cf;
+  const bad = cf.length > 0 && pw !== cf;
+  document.getElementById('fConfirm').classList.toggle('error', bad);
+  document.getElementById('fConfirm').classList.toggle('success', ok);
+  document.getElementById('errConfirm').classList.toggle('error', bad);
+  document.getElementById('okConfirm').classList.toggle('success', ok);
+}
+
+function validateTermos() {
+  document.getElementById('chkTermosWrap').classList.remove('error-check');
+}
+
+// ── STEP 4: VERIFICATION CODE ──
+function setupStep4() {
+  const email = document.getElementById('fEmail').value;
+  const parts = email.split('@');
+  const masked = parts[0].slice(0,2) + '***@' + (parts[1] || '');
+  document.getElementById('emailDisplay').textContent = masked;
+  ['d1','d2','d3','d4','d5'].forEach(id => {
+    const el = document.getElementById(id);
+    el.value = '';
+    el.classList.remove('filled');
+  });
+  startResendTimer();
+}
+
+function codeInput(el, nextId) {
+  el.value = el.value.replace(/\D/g,'').slice(-1);
+  el.classList.toggle('filled', el.value.length > 0);
+  if (el.value && nextId) document.getElementById(nextId).focus();
+  hideAlert('alert4');
+  // Auto-verify when all filled
+  const code = ['d1','d2','d3','d4','d5'].map(id => document.getElementById(id).value).join('');
+  if (code.length === 5) setTimeout(verifyCode, 200);
+}
+
+function codeBack(e, el, prevId) {
+  if (e.key === 'Backspace' && !el.value && prevId) {
+    document.getElementById(prevId).focus();
+    document.getElementById(prevId).value = '';
+    document.getElementById(prevId).classList.remove('filled');
+  }
+}
+
+function verifyCode() {
+  const code = ['d1','d2','d3','d4','d5'].map(id => document.getElementById(id).value).join('');
+  if (code.length < 5) return;
+  hideAlert('alert4');
+  // Demo: accept '12345' or any 5-digit code
+  if (code === CORRECT_CODE || code.length === 5) {
+    goToStep(5);
+  } else {
+    showAlert('alert4');
+    ['d1','d2','d3','d4','d5'].forEach(id => {
+      document.getElementById(id).classList.add('error');
+      setTimeout(() => document.getElementById(id).classList.remove('error'), 1500);
+    });
+  }
+}
+
+function startResendTimer() {
+  clearInterval(codeTimer);
+  let sec = 60;
+  document.getElementById('resendBtn').disabled = true;
+  document.getElementById('resendBtn').style.opacity = '0.4';
+  document.getElementById('countdownWrap').style.display = 'inline';
+  document.getElementById('countdown').textContent = sec;
+  codeTimer = setInterval(() => {
+    sec--;
+    document.getElementById('countdown').textContent = sec;
+    if (sec <= 0) {
+      clearInterval(codeTimer);
+      document.getElementById('resendBtn').disabled = false;
+      document.getElementById('resendBtn').style.opacity = '1';
+      document.getElementById('countdownWrap').style.display = 'none';
+    }
+  }, 1000);
+}
+
+function resendCode() {
+  showAlertSuccess('alert4ok');
+  setTimeout(() => hideAlert('alert4ok'), 3000);
+  startResendTimer();
+}
+
+// ── STEP 5: SUCCESS ──
+function setupSuccess() {
+  const nome = document.getElementById('fNome').value.trim();
+  const email = document.getElementById('fEmail').value.trim();
+  const tel = document.getElementById('fTel').value.trim();
+  const tipo = selectedType === 'cliente' ? '🛒 Cliente' : '🔧 Profissional';
+
+  document.getElementById('sumNome').textContent = nome;
+  document.getElementById('sumEmail').textContent = email;
+  document.getElementById('sumTipo').textContent = tipo;
+  document.getElementById('sumTel').textContent = tel;
+
+  if (selectedType === 'freelancer') {
+    document.getElementById('successSub').textContent = 'Bem-vindo à Rapidex! Sua conta foi criada. Complete seu perfil para começar a receber pedidos.';
+    document.getElementById('btnGoAppLabel').textContent = 'Completar meu perfil →';
+  } else {
+    document.getElementById('successSub').textContent = 'Bem-vindo à Rapidex! Sua conta foi verificada e está pronta para uso.';
+    document.getElementById('btnGoAppLabel').textContent = 'Explorar serviços →';
+  }
+
+  let count = 5;
+  const timer = setInterval(() => {
+    count--;
+    document.getElementById('autoRedirect').textContent = count;
+    if (count <= 0) { clearInterval(timer); goToDashboard(); }
+  }, 1000);
+}
+
+function goToDashboard() {
+  if (selectedType === 'freelancer') window.location.href = 'rapidex-prestador.html';
+  else window.location.href = 'rapidex-home.html';
+}
+
+// ── ALERT HELPERS ──
+function showAlert(id) { document.getElementById(id).style.display = 'flex'; }
+function hideAlert(id) { document.getElementById(id).style.display = 'none'; }
+function showAlertSuccess(id) { document.getElementById(id).style.display = 'flex'; }
+</script>
+</body>
+</html>

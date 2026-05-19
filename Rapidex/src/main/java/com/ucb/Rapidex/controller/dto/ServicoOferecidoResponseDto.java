@@ -1,0 +1,15 @@
+package com.ucb.Rapidex.controller.dto;
+
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+public record ServicoOferecidoResponseDto(
+        UUID id,
+        UUID prestadorId,
+        String nome,
+        String descricao,
+        BigDecimal precoBase,
+        String unidadePreco,
+        OffsetDateTime criadoEm) {
+}
