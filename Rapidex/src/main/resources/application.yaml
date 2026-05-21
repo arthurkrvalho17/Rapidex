@@ -3,7 +3,7 @@ spring:
     name: Rapidex
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/rapidexdb
+    url: jdbc:postgresql://localhost:5433/rapidexdb?stringtype=unspecified
     username: rapidex
     password: rapidex
     driver-class-name: org.postgresql.Driver

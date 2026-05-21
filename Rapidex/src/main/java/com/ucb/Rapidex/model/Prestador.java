@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -34,6 +36,21 @@ public class Prestador {
 
     @Column(name = "total_avaliacoes", nullable = false)
     private Integer totalAvaliacoes;
+
+    @Column(nullable = false, length = 50)
+    private String cidade;
+
+    @Column(name = "uf", nullable = false, columnDefinition = "uf_enum")
+    private String uf;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "prestador_area_atuacao",
+            joinColumns = @JoinColumn(name = "prestador_id")
+    )
+    @Column(name = "area", columnDefinition = "area_atuacao")
+    @Convert(converter = com.ucb.Rapidex.model.converter.AreaAtuacaoConverter.class)
+    private Set<AreaAtuacao> areasAtuacao = new HashSet<>();
 
     @Column(name = "criado_em", nullable = false)
     private OffsetDateTime criadoEm;
@@ -100,6 +117,30 @@ public class Prestador {
 
     public void setTotalAvaliacoes(Integer totalAvaliacoes) {
         this.totalAvaliacoes = totalAvaliacoes;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+
+    public String getUf() {
+        return uf;
+    }
+
+    public void setUf(String uf) {
+        this.uf = uf;
+    }
+
+    public Set<AreaAtuacao> getAreasAtuacao() {
+        return areasAtuacao;
+    }
+
+    public void setAreasAtuacao(Set<AreaAtuacao> areasAtuacao) {
+        this.areasAtuacao = areasAtuacao;
     }
 
     public OffsetDateTime getCriadoEm() {

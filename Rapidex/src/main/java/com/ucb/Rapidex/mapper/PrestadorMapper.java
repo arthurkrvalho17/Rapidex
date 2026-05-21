@@ -36,6 +36,9 @@ public class PrestadorMapper {
                 p.getStatus(),
                 p.getAvaliacaoMedia(),
                 p.getTotalAvaliacoes(),
+                p.getCidade(),
+                p.getUf(),
+                p.getAreasAtuacao(),
                 p.getCriadoEm());
     }
 

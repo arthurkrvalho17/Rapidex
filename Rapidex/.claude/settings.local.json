@@ -3,7 +3,8 @@
     "allow": [
       "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Arthur Carvalho\\\\Documents\\\\Projetos\\\\ProjetoRapidex\\\\Rapidex\" -Recurse)",
       "Bash(Select-Object -ExpandProperty FullName)",
-      "Bash(Sort-Object)"
+      "Bash(Sort-Object)",
+      "Bash(curl *)"
     ]
   }
 }

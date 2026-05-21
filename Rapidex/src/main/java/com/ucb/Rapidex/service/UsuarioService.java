@@ -24,6 +24,7 @@ public class UsuarioService {
     public void salvar(Usuario usuario) {
         var senhaCriptografada = encoder.encode(usuario.getSenha_hash());
         usuario.setSenha_hash(senhaCriptografada);
+
         repository.save(usuario);
     }
 

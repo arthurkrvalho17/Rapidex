@@ -16,8 +16,6 @@ public class FlywayConfig {
                 .locations("classpath:db/migration")
                 .baselineOnMigrate(true)
                 .baselineVersion("0")
-                .cleanDisabled(false)
-                .cleanOnValidationError(true)
                 .load();
     }
 }

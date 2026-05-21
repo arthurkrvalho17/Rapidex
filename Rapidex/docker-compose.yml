@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: rapidex-postgres
+    environment:
+      POSTGRES_USER: rapidex
+      POSTGRES_PASSWORD: rapidex
+      POSTGRES_DB: rapidexdb
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - rapidex-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rapidex -d rapidexdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - rapidex-network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: rapidex-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@rapidex.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "15432:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - rapidex-network
+
+volumes:
+  rapidex-pgdata:
+
+networks:
+  rapidex-network:
+    driver: bridge

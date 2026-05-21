@@ -60,11 +60,24 @@ public class CadastroService {
     }
 
     private UUID criarPrestador(UUID usuarioId, CadastroRequestDto dto, OffsetDateTime agora) {
+        if (dto.cidade() == null || dto.cidade().isBlank()) {
+            throw new IllegalArgumentException("Campo 'cidade' é obrigatório para prestadores.");
+        }
+        if (dto.uf() == null || dto.uf().isBlank()) {
+            throw new IllegalArgumentException("Campo 'uf' é obrigatório para prestadores.");
+        }
+        if (dto.areasAtuacao() == null || dto.areasAtuacao().isEmpty()) {
+            throw new IllegalArgumentException("Informe ao menos uma área de atuação.");
+        }
+
         var prestador = new Prestador();
         prestador.setUsuarioId(usuarioId);
         prestador.setNome(dto.nome());
         prestador.setTelefone(dto.telefone());
         prestador.setFotoUrl(dto.fotoUrl());
+        prestador.setCidade(dto.cidade());
+        prestador.setUf(dto.uf());
+        prestador.setAreasAtuacao(dto.areasAtuacao());
         prestador.setStatus(StatusPrestador.OFFLINE);
         prestador.setAvaliacaoMedia(BigDecimal.ZERO);
         prestador.setTotalAvaliacoes(0);
